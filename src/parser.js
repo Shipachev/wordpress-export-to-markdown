@@ -66,10 +66,10 @@ function collectPosts(data, postTypes, config) {
 					imageUrls: []
 				},
 				frontmatter: {
-					title: getPostTitle(post),
-					date: getPostDate(post),
-					categories: getCategories(post),
-					tags: getTags(post)
+                    title: getPostTitle(post),
+                    date: getPostDate(post),
+                    layout: 'layouts/post.njk',
+                    permalink: "{{ page.filePathStem }}.html"
 				},
 				content: translator.getPostContent(post, turndownService, config)
 			}));
