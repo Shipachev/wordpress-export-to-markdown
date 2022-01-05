@@ -86,6 +86,8 @@ function getPostContent(post, turndownService, config) {
 
     // Убирает окружающий изображение caption
     content = content.replace(/(.*)(\!\[.*\]\(.*\)) (.*)/gi, '$2')
+    content = content.replace(/(.*)\[\]\((.*) \"(.*)\"\)\\\[\/caption\\\]/gi, '![$3]($2)')
+
 
 
 	// clean up the "." from the iframe hack above
