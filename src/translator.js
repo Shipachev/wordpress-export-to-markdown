@@ -67,8 +67,11 @@ function getPostContent(post, turndownService, config) {
 	if (config.saveScrapedImages) {
 		// writeImageFile() will save all content images to a relative /images
 		// folder so update references in post content to match
-		content = content.replace(/(<img[^>]*src=").*?([^/"]+\.(?:gif|jpe?g|png))("[^>]*>)/gi, '$1$2$3');
 	}
+
+    content = content.replace(/(<img[^>]*src=").*?([^/"]+\.(?:gif|jpe?g|png))("[^>]*>)/gi, '$1$2$3');
+    //Заменяет object вставку с youtube на iframe
+    content = content.replace(/<object(.*)param name=\"src\" value=\"http:\/\/www.youtube.com\/v\/(.*)\?(.*)\/\>(.*)object>/gims, '<iframe width="560" height="315" src="https://www.youtube.com/embed/$2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
 
 	// this is a hack to make <iframe> nodes non-empty by inserting a "." which
 	// allows the iframe rule declared in initTurndownService() to take effect
@@ -87,7 +90,9 @@ function getPostContent(post, turndownService, config) {
     // Убирает окружающий изображение caption
     content = content.replace(/(.*)(\!\[.*\]\(.*\)) (.*)/gi, '$2')
     content = content.replace(/(.*)\[\]\((.*) \"(.*)\"\)\\\[\/caption\\\]/gi, '![$3]($2)')
-
+    content = content.replace(/\\\[caption(.*)\]!\[(.*)\]\((.*)\)(.*)\\\[\/caption\\\]/gi, '![$2]($3)')
+    content = content.replace(/\!\[(.*)\]\(((.*).(gif|jpe?g|png)) \"(.*)\"\)/gi, '![$5]($2)')
+    content = content.replace(/\\\[caption(.*)\]\[\!(.*)\(((.*).(gif|jpe?g|png))(.*)/gi, '!$2($3)')
 
 
 	// clean up the "." from the iframe hack above
